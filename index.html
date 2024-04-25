@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+
+<div id="main">
+    <h1>Chat Room</h1>
+    <ul id="messages"></ul>
+    <form id="form">
+        <input type="text" id="input" placeholder="Type message here">
+        <button id="btn">Send</button>
+
+    </form>
+</div>
+
+
+<!-- script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+
+        // Function to add message to the chat
+        function addMessage(username, message) {
+            const item = document.createElement("li");
+            item.textContent = `${username}: ${message}`;
+            messages.appendChild(item);
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Function to send message
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = "";
+            }
+        });
+
+        const username = prompt("Please enter your name:");
+
+        socket.emit('user joined', username);
+
+        socket.on('chat message', data => {
+            addMessage(data.username, data.message);
+        });
+
+        socket.on('user joined', username => {
+            addMessage('System', `${username} joined the chat`);
+        });
+
+        
+        socket.on('user left', username => {
+            addMessage('System', `${username} left the chat`);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #form{
+        margin: 10px 10px 10px 10px;
+    }
+    #btn{
+        background-color: rgb(9, 9, 9);
+        color: rgb(255, 255, 255);
+        }
+    #input{
+        border: 2px solid black;
+    }
+    body{
+        background-color: rgb(187, 193, 198);
+    }
+
+
+</style>
+<body>
+    <ul id="list"> </ul>
+        <form id="form">
+            <input type="text" id="input" placeholder="type message here">
+            <button id="btn">Send</button>
+        </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket=io();
+        const form=document.getElementById('form');
+        const input=document.getElementById('input');
+        const list=document.getElementById('list');
+        form.addEventListener('submit',e=>{
+            e.preventDefault();
+            if(input.value){
+                socket.emit('chat message',input.value);
+                input.value="";
+            }
+        });
+        socket.on('chat message',msg=>{
+            const item=document.createElement("li");
+            item.textContent=msg;
+            list.appendChild(item);
+
+        })
+    </script>
+</body>
+</html> -->
